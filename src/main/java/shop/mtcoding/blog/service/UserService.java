@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.dto.user.UserReq.JoinReqDto;
+import shop.mtcoding.blog.dto.user.UserReq.LoginReqDto;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.model.UserRepository;
@@ -23,5 +24,15 @@ public class UserService {
         }
         int result = userRepository.insert(joinReqDto.getUsername(), joinReqDto.getPassword(), joinReqDto.getEmail());
         return result;
+    }
+
+    public User 로그인(LoginReqDto loginReqDto) {
+        User user = new User();
+        user.setId(1);
+        user.setUsername("ssar");
+        user.setPassword("1234");
+        user.setEmail("ssar@nate.com");
+
+        return user;
     }
 }
