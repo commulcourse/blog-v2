@@ -34,10 +34,9 @@ public class UserController {
             throw new CustomException("email을 작성해주세요");
         }
 
-        int result = userService.회원가입(joinReqDto);
-        if (result != 1) {
-            throw new CustomException("회원가입실패");
-        }
+        userService.회원가입(joinReqDto);
+        // userService에서 알아서 처리함.
+
         return "redirect:/loginForm";
 
     }
@@ -52,7 +51,7 @@ public class UserController {
         return "user/loginForm";
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public String login(LoginReqDto loginReqDto) {
         if (loginReqDto.getUsername() == null || loginReqDto.getUsername().isEmpty()) {
             throw new CustomException("username을 작성해주세요");
@@ -61,9 +60,12 @@ public class UserController {
             throw new CustomException("password를 작성해주세요");
         }
         User principal = userService.로그인(loginReqDto);
-        if (principal == null) {
-            throw new CustomException("유저네임 혹은 패스워드가 잘못되었습니다.");
-        }
+
+        // if (principal == null) {
+        // throw new CustomException("유저네임 혹은 패스워드가 잘못되었습니다.");
+        // }
+        // 여기 쓸필요가 없고 service로 이동하여 그곳에서 검증하면 된다.
+
         session.setAttribute("principal", principal);
         return "redirect:/";
     }
@@ -75,6 +77,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout() {
+        session.invalidate();
         return "redirect:/";
     }
 }
