@@ -31,7 +31,7 @@ public class UserControllerTest {
     @Test
     public void join_test() throws Exception {
         // given
-        String requestBody = "username=ssar&password=1234&email=ssar@nate.com";
+        String requestBody = "username=ssar1&password=1234&email=ssar@nate.com";
 
         // when
         ResultActions resultActions = mvc.perform(post("/join").content(requestBody)
@@ -44,7 +44,7 @@ public class UserControllerTest {
     @Test
     public void login_test() throws Exception {
         // given
-        String requestBody = "username=cos&password=1234";
+        String requestBody = "username=ssar&password=1234";
 
         // when
         ResultActions resultActions = mvc.perform(post("/login").content(requestBody)
