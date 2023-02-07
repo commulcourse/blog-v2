@@ -59,7 +59,7 @@ public class BoardController {
         }
         boardService.게시글삭제(id, principal.getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "삭제성공", null), HttpStatus.OK);
-
+        // return "redirect:/";
     }
 
     @PostMapping("/board")

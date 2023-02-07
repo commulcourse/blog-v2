@@ -20,7 +20,7 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     @Transactional // 서비스에서 Exception 예외잡아내기, Where 절에 걸리는 파라미터를 앞에 받아야 한다고 했음!
-    public void 글수정(BoardUpdateReqDto boardUpdateReqDto, int id, int userId) {
+    public void 글수정(BoardUpdateReqDto boardUpdateDto, int id, int userId) {
         Board boardPS = boardRepository.findById(id);
         if (boardPS == null) {
             throw new CustomApiException("글이 존재 하지않아 수정이 불가합니다.");
@@ -30,7 +30,7 @@ public class BoardService {
         }
         try { // !!!!!!!!!!물어볼것!!!!!!!!!!! 왜 boardRepository에서만 id를 들고오는지?
               // boardUpdateReqDto의 id를 가지고 오면 안되는지!!!!???
-            boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent());
+            boardRepository.updateById(id, boardUpdateDto.getTitle(), boardUpdateDto.getContent());
         } catch (Exception e) {
             throw new CustomApiException("서버의 문제로 글수정에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
