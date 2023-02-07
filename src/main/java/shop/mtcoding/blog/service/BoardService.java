@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
+import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
 
 @Transactional(readOnly = true)
@@ -27,6 +29,26 @@ public class BoardService {
                 userId);
         if (result != 1) {
             throw new CustomException("회원가입실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @Transactional
+    public void 게시글삭제(int id, int userId) {
+        Board boardPS = boardRepository.findById(id);
+        if (boardPS == null) {
+            throw new CustomApiException("없는 게시글은 삭제할 수 없습니다.");
+        }
+        if (boardPS.getUserId() != userId) {
+            throw new CustomApiException("해당게시물을 삭제할 권한이 없습니다", HttpStatus.FORBIDDEN);
+        }
+
+        try {
+            boardRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new CustomApiException("서버에 일시적인 문제가 생겼습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+            // 터진 후 로그를 남겨야 함(DB or File)
+            // CustomApiHandlerException 을 하나 더 만들어서..
         }
     }
 
