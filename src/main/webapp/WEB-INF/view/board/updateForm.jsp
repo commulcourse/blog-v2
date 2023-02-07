@@ -25,6 +25,20 @@
                 tabsize: 2,
                 height: 400
             });
+
+            // BoardRepository,BoardController 확인해보기
+            function updateById(id) {
+                $.ajax({
+                    type: "updateById",
+                    url: "/board/" + id + "/update",
+                    dataType: "json"
+                }).done((res) => { //200대 일때
+                    alert(res.msg);
+                    location.href = "/";
+                }).fail((err) => { //400 , 500대 일때
+                    alert(err.resoibseJSON.msg);
+                });
+            }
         </script>
 
         <%@ include file="../layout/footer.jsp" %>
