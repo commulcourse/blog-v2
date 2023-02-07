@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import shop.mtcoding.blog.dto.ResponseDto;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateReqDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.BoardRepository;
@@ -33,26 +34,32 @@ public class BoardController {
     @Autowired
     private BoardRepository boardRepository;
 
+    @PostMapping("/board/{id}/update")
+    public @ResponseBody ResponseEntity<?> update(@PathVariable int id, BoardUpdateReqDto boardUpdateDto) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomException("인증이 되지 않습니다", HttpStatus.UNAUTHORIZED);
+        }
+        if (boardUpdateDto.getTitle() == null || boardUpdateDto.getTitle().isEmpty()) {
+            throw new CustomException("title을 작성해주세요");
+        }
+        if (boardUpdateDto.getContent() == null || boardUpdateDto.getContent().isEmpty()) {
+            throw new CustomException("content를 작성해주세요");
+        }
+        boardService.글수정(boardUpdateDto, id, principal.getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "수정성공", null), HttpStatus.OK);
+    }
+
     @DeleteMapping("/board/{id}")
     public @ResponseBody ResponseEntity<?> delete(@PathVariable int id) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            throw new CustomApiException("인증되지 않았습니다", HttpStatus.UNAUTHORIZED);
+            throw new CustomApiException("인증되지 않았습니다", HttpStatus.UNAUTHORIZED); // HttpStatus이 인증되지 않았음.
         }
         boardService.게시글삭제(id, principal.getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "삭제성공", null), HttpStatus.OK);
 
     }
-
-    /*
-     * public @responseBody ResponseEntity<?> delete(@PathVariable int id){
-     * User principal = (User) session.getAttribute("principal")
-     * if (principal == null){
-     * throw new CustomApiException("인증되지 않았습니다", HttpStatus.UNAUTHOR);
-     * }
-     * boardService.게시글삭제(id);
-     * return new ResponseEntity<>(new ResponseDto<>(1, "삭제성공", null), )}
-     */
 
     @PostMapping("/board")
     public String save(BoardSaveReqDto BoardSaveReqDto) {

@@ -1,7 +1,5 @@
 package shop.mtcoding.blog.dto.board;
 
-import javax.swing.text.AbstractDocument.Content;
-
 import lombok.Getter;
 import lombok.Setter;
 
