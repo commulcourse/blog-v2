@@ -40,12 +40,24 @@ public class BoardControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private MockHttpSession session;
+    @Autowired
+    private ObjectMapper om;
 
     private MockHttpSession mockSession;
 
-    @Autowired
-    private ObjectMapper om;
+    @BeforeEach // @Test메서드 실행 직전 마다 호출됨
+    public void setUp() {
+        User user = new User();
+        user.setId(1);
+        user.setUsername("ssar");
+
+        user.setPassword("1234");
+        user.setEmail("ssar@nate.com");
+        user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+
+        mockSession = new MockHttpSession();
+        mockSession.setAttribute("principal", user);
+    }
 
     @Test
     public void update_test() throws Exception {
@@ -151,17 +163,4 @@ public class BoardControllerTest {
         resultActions.andExpect(status().is3xxRedirection());
     }
 
-    @BeforeEach // @Test메서드 실행 직전 마다 호출됨
-    public void setUp() {
-        User user = new User();
-        user.setId(1);
-        user.setUsername("ssar");
-
-        user.setPassword("1234");
-        user.setEmail("ssar@nate.com");
-        user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-
-        mockSession = new MockHttpSession();
-        mockSession.setAttribute("principal", user);
-    }
 }
