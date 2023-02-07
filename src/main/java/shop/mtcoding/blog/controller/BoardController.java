@@ -47,6 +47,7 @@ public class BoardController {
             throw new CustomException("content를 작성해주세요");
         }
         boardService.글수정(boardUpdateDto, id, principal.getId());
+
         return new ResponseEntity<>(new ResponseDto<>(1, "수정성공", null), HttpStatus.OK);
     }
 

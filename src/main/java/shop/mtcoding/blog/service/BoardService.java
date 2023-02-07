@@ -19,7 +19,7 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
-    @Transactional
+    @Transactional // 서비스에서 Exception 예외잡아내기, Where 절에 걸리는 파라미터를 앞에 받아야 한다고 했음!
     public void 글수정(BoardUpdateReqDto boardUpdateReqDto, int id, int userId) {
         Board boardPS = boardRepository.findById(id);
         if (boardPS == null) {
@@ -32,10 +32,9 @@ public class BoardService {
               // boardUpdateReqDto의 id를 가지고 오면 안되는지!!!!???
             boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent());
         } catch (Exception e) {
-            throw new CustomApiException("서버에 일시적인 문제가 생겼습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-            // 터진 후 로그를 남겨야 함(DB or File)
-            // CustomApiHandlerException 을 하나 더 만들어서..
+            throw new CustomApiException("서버의 문제로 글수정에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        // return 1;
     }
 
     // where 절에 걸리는 파라미터를 앞에 받기

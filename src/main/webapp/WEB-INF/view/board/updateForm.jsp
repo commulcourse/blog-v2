@@ -3,7 +3,7 @@
     <%@ include file="../layout/header.jsp" %>
 
         <div class="container my-3">
-            <form action="/board/${id}/update" method="post" class="mb-1">
+            <form action="/board/${dto.id}/update" method="post" class="mb-1">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Enter title" name="title" id="title"
                         value="${dto.title}">
@@ -25,12 +25,17 @@
                 tabsize: 2,
                 height: 400
             });
-
             // BoardRepository,BoardController 확인해보기
             function updateById(id) {
+                let updateData = {
+                    title: $('#title').val(),
+                    content: $('#content').val()
+                }
+                
                 $.ajax({
-                    type: "updateById",
-                    url: "/board/" + id + "/update",
+                    type: "put",
+                    url: "/board/" + id +"/update",
+                    data: JSON.stringify(updateData),
                     dataType: "json"
                 }).done((res) => { //200대 일때
                     alert(res.msg);
