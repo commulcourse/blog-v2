@@ -18,11 +18,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import shop.mtcoding.blog.model.User;
 
 /*
- * SpringBootTest는 통합테스트 (실제환경과 동일하게 Bean이 생성됨, 포트도 랜덤으로 만들어짐)
+ * 배포전 꼭 필요한 TEST @SpringBootTest
+ *  SpringBootTest는 통합테스트 (실제환경과 동일하게 Bean이 생성됨, 포트도 랜덤으로 만들어짐)
  * @AutoConfigureMockMvc는 Mock 환경의 IoC컨테이너에 MockMvc Bean이 생성됨
 */
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+@SpringBootTest(webEnvironment = WebEnvironment.MOCK) //
 public class UserControllerTest {
 
     @Autowired

@@ -1,10 +1,14 @@
 package shop.mtcoding.blog.Controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +21,9 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import shop.mtcoding.blog.dto.board.BoardResp;
 import shop.mtcoding.blog.model.User;
 
 /*
@@ -34,18 +41,26 @@ public class BoardControllerTest {
 
     private MockHttpSession mockSession;
 
-    @BeforeEach // @Test메서드 실행 직전 마다 호출됨
-    public void setUp() {
-        User user = new User();
-        user.setId(1);
-        user.setUsername("ssar");
+    private ObjectMapper om;
 
-        user.setPassword("1234");
-        user.setEmail("ssar@nate.com");
-        user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+    @Test
+    public void main_test() throws Exception {
+        // given
 
-        mockSession = new MockHttpSession();
-        mockSession.setAttribute("principal", user);
+        // when
+        ResultActions resultActions = mvc.perform(
+                get("/"));
+        // then
+        resultActions.andExpect(status().isOk());
+        Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
+        List<BoardResp.BoardMainResponseDto> dtos = (List<BoardResp.BoardMainResponseDto>) map.get("dtos");
+        String model = om.writeValueAsString(dtos);
+        System.out.println("테스트:" + model);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        assertThat(dtos.size()).isEqualTo(model);
+        
     }
 
     @Test
@@ -67,4 +82,17 @@ public class BoardControllerTest {
         resultActions.andExpect(status().is3xxRedirection());
     }
 
+    @BeforeEach // @Test메서드 실행 직전 마다 호출됨
+    public void setUp() {
+        User user = new User();
+        user.setId(1);
+        user.setUsername("ssar");
+
+        user.setPassword("1234");
+        user.setEmail("ssar@nate.com");
+        user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+
+        mockSession = new MockHttpSession();
+        mockSession.setAttribute("principal", user);
+    }
 }
