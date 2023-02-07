@@ -64,10 +64,8 @@ public class BoardControllerTest {
          * 배열: [0]
          */
         // then
-
         resultActions.andExpect(jsonPath("$.code").value(1));
         resultActions.andExpect(status().isOk());
-
     }
 
     @Test
@@ -97,7 +95,7 @@ public class BoardControllerTest {
         ResultActions resultActions = mvc.perform(
                 get("/"));
         // then
-        resultActions.andExpect(status().isOk());
+        // resultActions.andExpect(status().isOk());
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         List<BoardResp.BoardMainResponseDto> dtos = (List<BoardResp.BoardMainResponseDto>) map.get("dtos");
         String model = om.writeValueAsString(dtos);
@@ -105,7 +103,9 @@ public class BoardControllerTest {
 
         // then
         resultActions.andExpect(status().isOk());
-        assertThat(dtos.size()).isEqualTo(model);
+        assertThat(dtos.size()).isEqualTo(6);
+        assertThat(dtos.get(0).getUsername()).isEqualTo("ssar");
+        assertThat(dtos.get(0).getTitle()).isEqualTo("1번째 제목");
 
     }
 

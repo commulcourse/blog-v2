@@ -38,17 +38,6 @@ public class UserController {
         // userService에서 알아서 처리함.
 
         return "redirect:/loginForm";
-
-    }
-
-    @GetMapping("/joinForm")
-    public String joinForm() {
-        return "user/joinForm";
-    }
-
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "user/loginForm";
     }
 
     @PostMapping("/login")
@@ -68,6 +57,16 @@ public class UserController {
 
         session.setAttribute("principal", principal);
         return "redirect:/";
+    }
+
+    @GetMapping("/joinForm")
+    public String joinForm() {
+        return "user/joinForm";
+    }
+
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "user/loginForm";
     }
 
     @GetMapping("/user/updateForm")

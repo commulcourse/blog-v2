@@ -20,7 +20,7 @@ public class BoardResp {
     public static class BoardDetailResponseDto {
         private int id;
         private String title;
-        private String Content;
+        private String content;
         private int userId;
         private String username;
 

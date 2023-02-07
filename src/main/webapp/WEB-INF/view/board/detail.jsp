@@ -10,20 +10,6 @@
                 </div>
             </c:if>
 
-            <script>
-                function deleteById(id) {
-                    $.ajax({
-                        type: "board",
-                        url: "/board/" + id,
-                        dataType: "json"
-                    }).done((res) => { //200대 일때
-                        alert(res.msg);
-                        location.href = "/";
-                    }).fail((err) => { //400 , 500대 일때
-                        alert(err.resoibseJSON.msg);
-                    });
-                }
-            </script>
 
             <div class="mb-2">
                 글 번호 : <span id="id"><i>${dto.id}</i></span> 작성자 : <span class="me-3"><i>${dto.username} </i></span>
@@ -64,5 +50,19 @@
                 </ul>
             </div>
         </div>
+        <script>
+            function deleteById(id) {
+            $.ajax({
+                type: "delete",
+                    url: "/board/" + id,
+                    dataType: "json"
+                }).done((res) => { //200대 일때
+                    alert(res.msg);
+                    location.href = "/";
+                }).fail((err) => { //400 , 500대 일때
+                    alert(err.resoibseJSON.msg);
+                });
+            }
+        </script>
 
         <%@ include file="../layout/footer.jsp" %>
