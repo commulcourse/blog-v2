@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import shop.mtcoding.blog.dto.board.BoardResp.BoardMainResponseDto;
+import shop.mtcoding.blog.dto.board.BoardResp.BoardMainRespDto;
 
 // f - ds - 컨트롤러Controller -서비스Service - 레파지토리Repository - 마이바티스Mybatis
 //SRP 솔리드의 원칙 - 단일책임의 원칙 // 나
 
 // F - DS - C
+// F - DS - C - S - R - MyBatis - DB
 @MybatisTest
 public class BoardRepositoryTest {
 
@@ -25,17 +26,14 @@ public class BoardRepositoryTest {
     @Test
     public void findAllWithUser_test() throws Exception {
         // given
-        ObjectMapper om = new ObjectMapper(); // Jackson라이브러리라 작동할때 Jackson은 json으로 바꾸어준다. (컨트롤러에서 )
+        ObjectMapper om = new ObjectMapper(); // Jackson
+
         // when
-        List<BoardMainResponseDto> boardMainResponseDto = boardRepository.findAllWithUser();
-        // System.out.println("테스트: size: " + BoardMainRespDto.size());
+        List<BoardMainRespDto> BoardMainRespDto = boardRepository.findAllWithUser();
+        String responseBody = om.writeValueAsString(BoardMainRespDto);
+        System.out.println("테스트 : " + responseBody);
 
-        String responseBody = om.writeValueAsString(boardMainResponseDto);
-        System.out.println("테스트" + responseBody);
-
-        // than
-
-        assertThat(boardMainResponseDto.get(5).getUsername()).isEqualTo("love");
-
+        // then
+        assertThat(BoardMainRespDto.get(5).getUsername()).isEqualTo("love");
     }
 }

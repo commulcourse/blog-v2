@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,17 +23,21 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateReqDto;
 import shop.mtcoding.blog.dto.board.BoardResp;
-import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailResponseDto;
+import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog.model.User;
 
 /*
  * SpringBootTest는 통합테스트 (실제환경과 동일하게 Bean이 생성됨, 포트도 랜덤으로 만들어짐)
  * @AutoConfigureMockMvc는 Mock 환경의 IoC컨테이너에 MockMvc Bean이 생성됨
 */
+
+@Transactional // 메서드 실행직후 롤백!! //auto_increment 초기화
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class BoardControllerTest {
@@ -44,6 +49,15 @@ public class BoardControllerTest {
     private ObjectMapper om;
 
     private MockHttpSession mockSession;
+
+    // @BeforeAll
+    // public static void 테이블차리기(){
+    // }
+
+    // @AfterEach
+    // public void teardown(){ //데이터 다 날리고 다시 인서트
+    // }
+    //
 
     @BeforeEach // @Test메서드 실행 직전 마다 호출됨
     public void setUp() {
@@ -63,22 +77,23 @@ public class BoardControllerTest {
     public void update_test() throws Exception {
         // given
 
-        String title = "";
-
-        for (int i = 0; i < 90; i++) {
-            title += "가";
-        }
-        String requestBody = "title=제목&content=내용&userId=1";
         int id = 1;
+        BoardUpdateReqDto boardUpdateReqDto = new BoardUpdateReqDto();
+        boardUpdateReqDto.setTitle("제목-수정");
+        boardUpdateReqDto.setContent("제목-수정");
+
+        String requestBody = om.writeValueAsString(boardUpdateReqDto);
+        System.out.println("테스트: " + requestBody);
 
         // when
         ResultActions resultActions = mvc.perform(
-                post("/board/" + id + "/update")
+                put("/board/" + id)
                         .content(requestBody)
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .session(mockSession));
 
         // then
+        resultActions.andExpect(status().isOk());
         resultActions.andExpect(status().is3xxRedirection());
     }
 
@@ -112,7 +127,7 @@ public class BoardControllerTest {
                 get("/board/" + id));
 
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
-        BoardDetailResponseDto dto = (BoardDetailResponseDto) map.get("dto");
+        BoardDetailRespDto dto = (BoardDetailRespDto) map.get("dto");
         String model = om.writeValueAsString(dto);
         System.out.println("테스트:" + model);
 
@@ -132,7 +147,7 @@ public class BoardControllerTest {
         // then
         // resultActions.andExpect(status().isOk());
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
-        List<BoardResp.BoardMainResponseDto> dtos = (List<BoardResp.BoardMainResponseDto>) map.get("dtos");
+        List<BoardResp.BoardMainRespDto> dtos = (List<BoardResp.BoardMainRespDto>) map.get("dtos");
         String model = om.writeValueAsString(dtos);
         System.out.println("테스트:" + model);
 
