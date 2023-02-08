@@ -15,6 +15,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
+import shop.mtcoding.blog.util.ThumbParse;
 
 @Transactional(readOnly = true)
 @Service
@@ -32,21 +33,7 @@ public class BoardService {
         if (boardPS.getUserId() != principalId) {
             throw new CustomApiException("게시물의 수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
-
-        String html = boardUpdateReqDto.getContent();
-        String thumbnail = "";
-        Document doc = Jsoup.parse(html);
-        // System.out.println(doc);
-        Elements els = doc.select("img");
-        if (els.size() == 0) {
-            thumbnail = "/images/dora.png";
-        } else {
-            Element el = els.get(0);
-            thumbnail = el.attr("src");
-            // System.out.print(img);
-        }
-        System.out.println(els);
-
+        String thumbnail = ThumbParse.Thumbnail(boardUpdateReqDto.getContent());
         try {
             int result = boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent(),
                     thumbnail);
