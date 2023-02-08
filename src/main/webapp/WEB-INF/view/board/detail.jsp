@@ -22,18 +22,19 @@
             <i>${dto.username} </i>
         </span>
 
-        <i id="heart" class="fa-regular fa-heart my-xl my-cursor" value="no"></i>
     </div>
 
     <div>
-        <h3>${dto.title}</h3>
+        <h2><b>${dto.title}</b></h2>
     </div>
     <hr/>
     <div>
         <div>${dto.content}</div>
     </div>
     <hr/>
-
+        <i id="heart" class="fa-regular fa-heart my-xl my-cursor" value="no"></i>&nbsp;
+    <br/>
+    <br/>
     <div class="card">
         <form>
             <div class="card-body">

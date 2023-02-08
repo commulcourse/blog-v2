@@ -1,8 +1,46 @@
 package shop.mtcoding.blog.util;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 
 public class HtmlParseTest {
+
+        @Test
+        public void jsoup_test1() throws Exception {
+                System.out.println("====================================");
+                Document doc = Jsoup.connect("https://en.wikipedia.org/").get();
+                // System.out.println(doc.title());
+                Elements newsHeadlines = doc.select("#mp-itn b a");
+                for (Element headline : newsHeadlines) {
+                        System.out.println(headline.attr("title"));
+                        System.out.println(headline.attr("href"));
+                        System.out.println("=====================================");
+                        // log("%s\n\t%s",
+                        // headline.attr("title"), headline.absUrl("href"));
+                }
+        }
+
+        // 임시사진 제공해주기
+        // 디비 thumnail.-> /images/profile.jfjf
+        // insert, update할때 실행해준다
+        @Test
+        public void jsoup_test2() {
+                String html = "<p>1</p><p><img src=\"images/dora.png\"></p>";
+                Document doc = Jsoup.parse(html);
+                // System.out.println(doc);
+                Elements els = doc.select("img");
+                if (els.size() == 0) {
+
+                } else {
+                        Element el = els.get(0);
+                        String img = el.attr("src");
+                        System.out.print(img);
+                }
+                // System.out.println(els);
+        }
 
         @Test
         public void parse_test1() {

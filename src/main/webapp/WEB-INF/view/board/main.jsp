@@ -7,10 +7,11 @@
 
         <c:forEach items="${dtos}" var="dto">
             <div class="card col-lg-3">
-                <img class="card-img-top" style="height: 250px;" src="images/profile.jfif" alt="Card image">
+                <img class="card-img-top" style="height: 250px;" src="${dto.thumbnail}" alt="Card image">
+                <hr/>
                 <div class="card-body">
                     <div>작성자 : ${dto.username}</div>
-                    <h4 class="card-title my-text-ellipsis">${dto.title}</h4>
+                    <h4 class="card-title my-text-ellipsis">${dto.title} </h4>
                     <a href="/board/${dto.id}" class="btn btn-primary">상세보기</a>
                 </div>
             </div>

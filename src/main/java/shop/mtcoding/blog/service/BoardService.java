@@ -1,5 +1,9 @@
 package shop.mtcoding.blog.service;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,25 +32,59 @@ public class BoardService {
         if (boardPS.getUserId() != principalId) {
             throw new CustomApiException("게시물의 수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
+
+        String html = boardUpdateReqDto.getContent();
+        String thumbnail = "";
+        Document doc = Jsoup.parse(html);
+        // System.out.println(doc);
+        Elements els = doc.select("img");
+        if (els.size() == 0) {
+            thumbnail = "/images/dora.png";
+        } else {
+            Element el = els.get(0);
+            thumbnail = el.attr("src");
+            // System.out.print(img);
+        }
+        System.out.println(els);
+
         try {
-            int result = boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent());
+            int result = boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent(),
+                    thumbnail);
         } catch (Exception e) {
             throw new CustomApiException("서버의 문제로 글수정에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
         // return 1;
     }
 
     // where 절에 걸리는 파라미터를 앞에 받기
     @Transactional
     public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
+
+        // 1. content 내용을 Document로 받고, img 찾아내서(0,1,2) src를 찾아서 thumbnail추가
+
+        String html = boardSaveReqDto.getContent();
+        String thumbnail = "";
+        Document doc = Jsoup.parse(html);
+        // System.out.println(doc);
+        Elements els = doc.select("img");
+        if (els.size() == 0) {
+            thumbnail = "/images/dora.png";
+        } else {
+            Element el = els.get(0);
+            thumbnail = el.attr("src");
+            // System.out.print(img);
+        }
+        System.out.println(els);
         int result = boardRepository.insert(
                 boardSaveReqDto.getTitle(),
                 boardSaveReqDto.getContent(),
+                thumbnail,
                 userId);
         if (result != 1) {
             throw new CustomException("회원가입실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
+        /// images/dora.png
     }
 
     @Transactional
@@ -66,9 +104,6 @@ public class BoardService {
             // 터진 후 로그를 남겨야 함(DB or File)
             // CustomApiHandlerException 을 하나 더 만들어서..
         }
-    }
-
-    public void 글수정(int id, BoardUpdateReqDto boardUpdateReqDto) {
     }
 
 }

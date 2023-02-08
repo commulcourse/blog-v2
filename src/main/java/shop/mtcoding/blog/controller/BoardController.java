@@ -87,23 +87,23 @@ public class BoardController {
     }
 
     @PostMapping("/board")
-    public String save(BoardSaveReqDto BoardSaveReqDto) {
+    public String save(BoardSaveReqDto boardSaveReqDto) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             throw new CustomException("인증되지 않았습니다", HttpStatus.UNAUTHORIZED);
         }
-        if (BoardSaveReqDto.getTitle() == null || BoardSaveReqDto.getTitle().isEmpty()) {
+        if (boardSaveReqDto.getTitle() == null || boardSaveReqDto.getTitle().isEmpty()) {
             throw new CustomException("title을 작성해주세요");
         }
-        if (BoardSaveReqDto.getContent() == null || BoardSaveReqDto.getContent().isEmpty()) {
+        if (boardSaveReqDto.getContent() == null || boardSaveReqDto.getContent().isEmpty()) {
             throw new CustomException("content를 작성해주세요");
         }
-        if (BoardSaveReqDto.getContent() == null || BoardSaveReqDto.getContent().isEmpty()
-                || BoardSaveReqDto.getTitle().length() > 100) {
+        if (boardSaveReqDto.getContent() == null || boardSaveReqDto.getContent().isEmpty()
+                || boardSaveReqDto.getTitle().length() > 100) {
             throw new CustomException("100자이내로 작성해주세요");
         }
 
-        boardService.글쓰기(BoardSaveReqDto, principal.getId());
+        boardService.글쓰기(boardSaveReqDto, principal.getId());
         return "redirect:/";
     }
 
