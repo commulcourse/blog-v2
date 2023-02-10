@@ -10,15 +10,12 @@ public class BoardReq {
     public static class BoardSaveReqDto {
         private String title;
         private String content;
-
     }
 
     @Setter
     @Getter
     public static class BoardUpdateReqDto {
-
         private String title;
         private String content;
-
     }
 }

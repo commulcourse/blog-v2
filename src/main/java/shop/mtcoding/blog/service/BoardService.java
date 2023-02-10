@@ -15,7 +15,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
-import shop.mtcoding.blog.util.ThumbParse;
+import shop.mtcoding.blog.util.HtmlParser;
 
 @Transactional(readOnly = true)
 @Service
@@ -33,14 +33,14 @@ public class BoardService {
         if (boardPS.getUserId() != principalId) {
             throw new CustomApiException("게시물의 수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
-        String thumbnail = ThumbParse.Thumbnail(boardUpdateReqDto.getContent());
+        String thumbnail = HtmlParser.getThumbnail(boardUpdateReqDto.getContent());
+
         try {
             int result = boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent(),
                     thumbnail);
         } catch (Exception e) {
             throw new CustomApiException("서버의 문제로 글수정에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         // return 1;
     }
 
@@ -62,7 +62,7 @@ public class BoardService {
             thumbnail = el.attr("src");
             // System.out.print(img);
         }
-        System.out.println(els);
+        // System.out.println(els);
         int result = boardRepository.insert(
                 boardSaveReqDto.getTitle(),
                 boardSaveReqDto.getContent(),

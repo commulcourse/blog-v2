@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import shop.mtcoding.blog.dto.ResponseDto;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
@@ -36,6 +37,15 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @PostMapping("/juso")
+    public @ResponseBody String callback(String roadFullAddr) {
+        System.out.println("도로명주소:" + roadFullAddr);
+
+        // RestTemplate rt = new RestTemplate(); //타 서버에 들어가서 정보를 가지고오는것?
+
+        return "ok";
+    }
 
     @PutMapping("/board/{id}")
     public @ResponseBody ResponseEntity<?> update(@PathVariable int id,
@@ -86,8 +96,8 @@ public class BoardController {
         // return "redirect:/";
     }
 
-    @PostMapping("/board")
-    public String save(BoardSaveReqDto boardSaveReqDto) {
+    @PostMapping("/board") // @ResponseBody 안붙여도 됨. ResponseEntity<?>가 붙여지면 자동으로 ResponsBody가 설정되는거임
+    public @ResponseBody ResponseEntity<?> save(@RequestBody BoardSaveReqDto boardSaveReqDto) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             throw new CustomException("인증되지 않았습니다", HttpStatus.UNAUTHORIZED);
@@ -104,7 +114,7 @@ public class BoardController {
         }
 
         boardService.글쓰기(boardSaveReqDto, principal.getId());
-        return "redirect:/";
+        return new ResponseEntity<>(new ResponseDto<>(1, "글쓰기 성공", null), HttpStatus.CREATED); // 201 인써트되었다.
     }
 
     @GetMapping({ "/", "/board" })

@@ -12,7 +12,6 @@ public class UserReq {
         private String username;
         private String password;
         private String email;
-
     }
 
     @AllArgsConstructor
@@ -20,6 +19,5 @@ public class UserReq {
     public static class LoginReqDto {
         private String username;
         private String password;
-
     }
 }

@@ -20,6 +20,10 @@ public class HtmlParseTest {
                         System.out.println("=====================================");
                         // log("%s\n\t%s",
                         // headline.attr("title"), headline.absUrl("href"));
+                        /*
+                         * Document doc = Jsoup.connect("https://en.wikipedia.org/").get();
+                         */
+
                 }
         }
 
