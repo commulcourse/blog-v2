@@ -5,21 +5,19 @@
 
 <mapper namespace="shop.mtcoding.blog.model.ReplyRepository">
    
-   <!-- <select id="findByIdWithComment" resultTeype="shop.mtcoding.blog.model.Reply">
-        select bt.id, ut.id, rt.userId
-        from board_tb bt
-        outter join user_tb ut
-        on ut.ud = rt.user_Id
-        where bt.id = 1
-   </select> -->
-
     <select id="findAll" resultType="shop.mtcoding.blog.model.Reply">
         select * from reply_tb
     </select>
-
     <select id="findById" resultType="shop.mtcoding.blog.model.Reply">
         select * from reply_tb where id = #{id}
-    </select>    
+    </select>                                    
+    <select id="findByBoardIdWithUser" resultTeype="shop.mtcoding.blog.dto.reply.ReplyResp$ReplyDetailRespDto">
+        select rt.id, rt.comment, rt.user_id, rt.board_id, ut.username
+        from reply_tb rt
+             inner join user_tb ut
+                on rt.user_id = ut.id
+        where rt.board_id = #{boardId}
+    </select>
 
     <insert id="insert">
         insert into reply_tb (comment, board_id, user_id, created_at) values(#{comment}, #{boardId}, #{userId}, now())

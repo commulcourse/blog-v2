@@ -1,6 +1,5 @@
 package shop.mtcoding.blog.dto.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +13,7 @@ public class UserReq {
         private String email;
     }
 
-    @AllArgsConstructor
+    @Setter
     @Getter
     public static class LoginReqDto {
         private String username;

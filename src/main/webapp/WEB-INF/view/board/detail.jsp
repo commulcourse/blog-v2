@@ -4,10 +4,10 @@
 
 
         <div class="container my-3">
-            <c:if test="${dto.userId == principal.id}">
+            <c:if test="${boarddto.userId == principal.id}">
                 <div class="mb-3">
-                    <a href="/board/${dto.id}/updateForm" class="btn btn-warning">수정</a>
-                    <button onClick="deleteById(${dto.id})" id="btn-delete" class="btn btn-danger">삭제</button>
+                    <a href="/board/${boarddto.id}/updateForm" class="btn btn-warning">수정</a>
+                    <button onClick="deleteById(${boarddto.id})" id="btn-delete" class="btn btn-danger">삭제</button>
                 </div>
             </c:if>
 
@@ -15,21 +15,21 @@
             <div class="mb-2">
                 글 번호 :
                 <span id="id">
-                    <i>${dto.id} </i>
+                    <i>${boarddto.id} </i>
                 </span>
                 작성자 :
                 <span class="me-3">
-                    <i>${dto.username} </i>
+                    <i>${boarddto.username} </i>
                 </span>
 
             </div>
 
             <div>
-                <h2><b>${dto.title}</b></h2>
+                <h2><b>${boarddto.title}</b></h2>
             </div>
             <hr />
             <div>
-                <div>${dto.content}</div>
+                <div>${boarddto.content}</div>
             </div>
             <hr />
             <i id="heart" class="fa-regular fa-heart my-xl my-cursor" value="no"></i>&nbsp;
@@ -37,7 +37,7 @@
             <br />
             <div class="card mt-3">
                 <form action="/reply" method="post">
-                    <input type="hidden" name="boardId" value="${dto.id}">
+                    <input type="hidden" name="boardId" value="${boarddto.id}">
                     <div class="card-body">
                         <textarea name="comment" id="reply-content" class="form-control" rows="1"></textarea>
                     </div>
@@ -50,18 +50,24 @@
             <div class="card">
                 <div class="card-header">댓글 리스트</div>
                 <ul id="reply-box" class="list-group">
-                    <li id="reply-1" class="list-group-item d-flex justify-content-between">
-                        <div>댓글내용입니다</div>
+                <c:forEach items="${replyDtos}" var="reply">
+                    <li id="reply-${reply.id}" class="list-group-item d-flex justify-content-between">
+                        <div>${reply.comment}</div>
                         <div class="d-flex">
-                            <div class="font-italic">작성자 : cos &nbsp;</div>
-                            <button onClick="replyDelete()" class="badge bg-secondary">삭제</button>
+                            <div class="font-italic">작성자 : ${reply.username};</div>
+                            <button onClick="DeleteByReplyId(${reply.id}" class="badge bg-secondary">삭제</button>
                         </div>
                     </li>
+                    </c:forEach>
                 </ul>
             </div>
         </div>
 
         <script>
+            function DeleteByReplyId(id){
+                ${"#reply-".id}.remove();
+            }
+            
             function deleteById(id) {
                 $.ajax({
                     type: "delete",

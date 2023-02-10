@@ -3,15 +3,13 @@ package shop.mtcoding.blog.dto.reply;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ReplyResp {
+public class ReplyReq {
 
         @Setter
         @Getter
-        public static class ReplyDetailRespDto {
-                private Integer Id;
+        public static class ReplySaveReqDto {
                 private String comment;
-                private Integer userId;
                 private Integer boardId;
-                private String username;
         }
+
 }
