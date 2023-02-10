@@ -15,6 +15,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
+import shop.mtcoding.blog.model.ReplyRepository;
 import shop.mtcoding.blog.util.HtmlParser;
 
 @Transactional(readOnly = true)
@@ -23,6 +24,9 @@ public class BoardService {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private ReplyRepository replyRepository;
 
     @Transactional
     public void 글수정(int id, int principalId, BoardUpdateReqDto boardUpdateReqDto) {
