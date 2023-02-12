@@ -63,27 +63,6 @@ public class BoardController {
         return new ResponseEntity<>(new ResponseDto<>(1, "수정성공", null), HttpStatus.OK);
     }
 
-    // @PostMapping("/board/{id}")
-    // public @ResponseBody ResponseEntity<?> update(@PathVariable int id,
-    // BoardUpdateReqDto boardUpdateDto) {
-    // User principal = (User) session.getAttribute("principal");
-    // if (principal == null) {
-    // throw new CustomException("인증이 되지 않습니다", HttpStatus.UNAUTHORIZED);
-    // }
-    // if (boardUpdateDto.getTitle() == null || boardUpdateDto.getTitle().isEmpty())
-    // {
-    // throw new CustomException("title을 작성해주세요");
-    // }
-    // if (boardUpdateDto.getContent() == null ||
-    // boardUpdateDto.getContent().isEmpty()) {
-    // throw new CustomException("content를 작성해주세요");
-    // }
-    // boardService.글수정(boardUpdateDto, id, principal.getId());
-
-    // return new ResponseEntity<>(new ResponseDto<>(1, "수정성공", null),
-    // HttpStatus.OK);
-    // }
-
     @DeleteMapping("/board/{id}")
     public @ResponseBody ResponseEntity<?> delete(@PathVariable int id) {
         User principal = (User) session.getAttribute("principal");
