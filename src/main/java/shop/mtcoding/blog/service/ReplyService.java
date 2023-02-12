@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.dto.reply.ReplyReq.ReplySaveReqDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
+import shop.mtcoding.blog.model.Reply;
 import shop.mtcoding.blog.model.ReplyRepository;
 
 @Transactional(readOnly = true)
@@ -31,5 +32,22 @@ public class ReplyService {
             throw new CustomApiException("댓글쓰기실패", HttpStatus.INTERNAL_SERVER_ERROR); // 500번에러
         }
         /// images/dora.png
+    }
+
+    @Transactional
+    public void 댓글삭제(int id, int principalId) {
+        Reply replyPS = replyRepository.findById(id);
+        if (replyPS == null) {
+            throw new CustomApiException("없는 댓글은 삭제할 수 없습니다.");
+        }
+        if (replyPS.getUserId() != principalId) {
+            throw new CustomApiException("해당 댓글을 삭제할 권한이 없습니다", HttpStatus.FORBIDDEN);
+        }
+
+        try {
+            replyRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new CustomApiException("서버에 일시적인 문제가 생겼습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
