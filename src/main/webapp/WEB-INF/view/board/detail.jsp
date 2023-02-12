@@ -55,7 +55,9 @@
                     <div>${reply.comment}</div>
                     <div class="d-flex">
                         <div class="font-italic">작성자 : ${reply.username} &nbsp;</div>
+                        <c:if test="${principal.id == reply.userId}" >
                         <button onClick="deleteByReplyId(${reply.id})" class="badge bg-secondary">삭제</button>
+                        </c:if>
                     </div>
                 </li>
             </c:forEach>
@@ -64,6 +66,20 @@
     </div>
 </div>
 
+<script>
+    function deleteByReplyId(id){
+        $.ajax({
+            type: "delete",
+            url: "/reply" + id,
+            dataType:"json"
+        }).done((res) => {
+            alert(res.msg);
+            $("#reply-"+id).remove();
+        }).fail((err) => {
+            alert(err.responseJSON.msg);
+        });
+    }
+</script>
 <script>
     function deleteById(id) {
         $.ajax({
