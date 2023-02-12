@@ -36,6 +36,6 @@
     </delete>    
 
     <update id="updateById" >
-        update reply_tb set comment= #{comment}, userId= #{userId}, boardId= #{boardId} where id = #{id} 
+        update reply_tb set comment= #{comment} where id = #{id} 
     </update>
 </mapper>

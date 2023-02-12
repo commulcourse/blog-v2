@@ -8,9 +8,9 @@ INSERT INTO board_tb(title, content, thumbnail, user_id, created_at) values('4�
 INSERT INTO board_tb(title, content, thumbnail, user_id, created_at) values('5번째 제목', '5번째 내용', '/images/dora.png', 2, now());
 INSERT INTO board_tb(title, content, thumbnail, user_id, created_at) values('6번째 제목', '6번째 내용', '/images/dora.png', 2, now());
 
-INSERT INTO reply_tb(comment, userId, boardId, created_at) values('댓글3 안노옹', 2, 1, now());
-INSERT INTO reply_tb(comment, userId, boardId, created_at) values('댓글2 안녕하세요', 1, 2 now());
-INSERT INTO reply_tb(comment, userId, boardId, created_at) values('댓글1 안녕하십니까', 1, 1, now());
+INSERT INTO reply_tb(comment, userId, boardId, created_at) values('댓글3 안노옹', 1, 1, now());
+INSERT INTO reply_tb(comment, userId, boardId, created_at) values('댓글2 안녕하세요', 1, 2, now());
+INSERT INTO reply_tb(comment, userId, boardId, created_at) values('댓글1 안녕하십니까', 2, 1, now());
 INSERT INTO reply_tb(comment, userId, boardId, created_at) values('댓글4 하잇!', 2, 2, now());
 
 commit;

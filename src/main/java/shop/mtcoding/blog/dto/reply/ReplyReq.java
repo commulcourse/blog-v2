@@ -9,7 +9,7 @@ public class ReplyReq {
     @Getter
     public static class ReplySaveReqDto {
         private String comment;
-        private int userId;
-        private int boardId;
+        // private int userId;
+        private Integer boardId;
     }
 }

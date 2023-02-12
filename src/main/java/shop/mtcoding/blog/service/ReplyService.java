@@ -43,12 +43,13 @@ public class ReplyService {
 
     // where 절에 걸리는 파라미터를 앞에 받기
     @Transactional
-    public void 댓글쓰기(ReplySaveReqDto replySaveReqDto, int userId) {
+    public void 댓글쓰기(ReplySaveReqDto replySaveReqDto, int principalId) {
 
         int result = replyRepository.insert(
                 replySaveReqDto.getComment(),
-                replySaveReqDto.getUserId(),
-                replySaveReqDto.getBoardId());
+                // replySaveReqDto.getUserId(),
+                replySaveReqDto.getBoardId(),
+                principalId);
 
         if (result != 1) {
             throw new CustomException("댓글쓰기실패", HttpStatus.INTERNAL_SERVER_ERROR);
