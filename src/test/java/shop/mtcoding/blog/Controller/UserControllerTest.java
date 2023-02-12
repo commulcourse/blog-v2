@@ -1,4 +1,4 @@
-package shop.mtcoding.blog.Controller;
+package shop.mtcoding.blog.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
