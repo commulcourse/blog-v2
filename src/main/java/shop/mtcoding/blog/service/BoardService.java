@@ -69,7 +69,7 @@ public class BoardService {
                 thumbnail,
                 userId);
         if (result != 1) {
-            throw new CustomException("회원가입실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("글쓰기실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         /// images/dora.png
     }
