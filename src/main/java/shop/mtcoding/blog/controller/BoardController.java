@@ -22,6 +22,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
+import shop.mtcoding.blog.model.ReplyRepository;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.service.BoardService;
 
@@ -33,6 +34,9 @@ public class BoardController {
 
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private ReplyRepository replyRepository;
 
     @Autowired
     private BoardRepository boardRepository;
@@ -103,7 +107,14 @@ public class BoardController {
 
     @GetMapping("/board/{id}")
     public String detail(@PathVariable int id, Model model) {
-        model.addAttribute("dto", boardRepository.findByIdWithUser(id));
+        // Board boardPS = boardRepository.findById(id);
+        // if (boardPS == null) {
+        // throw new CustomException("없는 게시글을 불러 올 수 없습니다.", HttpStatus.UNAUTHORIZED);
+        // // 401
+        // }
+
+        model.addAttribute("boardDto", boardRepository.findByIdWithUser(id));
+        model.addAttribute("replyDtos", replyRepository.findByBoardIdWithUser(id));
         return "board/detail";
     }
 

@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.dto.reply.ReplyReq.ReplySaveReqDto;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
+import shop.mtcoding.blog.service.ReplyService;
 
 @Controller
 public class ReplyController {
+
+    @Autowired
+    private ReplyService replyService;
 
     @Autowired
     private HttpSession session;
@@ -27,12 +31,16 @@ public class ReplyController {
         if (principal == null) {
             throw new CustomException("인증되지 않았습니다", HttpStatus.UNAUTHORIZED);
         }
-        if (replySaveReqDto.getComment() == null) {
-            throw new CustomException("comment 를 작성해주세요");
+        if (replySaveReqDto.getComment() == null || replySaveReqDto.getComment().isEmpty()) {
+            throw new CustomException("comment를 작성해주세요");
         }
-        if (replySaveReqDto.getComment().length() > 100) {
-            throw new CustomException("100자이내로 작성해주세요");
+        if (replySaveReqDto.getBoardId() == null) {
+            throw new CustomException("boardId가 필요합니다");
         }
+        // if (replySaveReqDto.getComment().length() > 100) {
+        // throw new CustomException("100자이내로 작성해주세요");
+        // }
+        replyService.댓글쓰기(replySaveReqDto, principal.getId());
         return "redirect:/board/" + replySaveReqDto.getBoardId();
     }
 }
