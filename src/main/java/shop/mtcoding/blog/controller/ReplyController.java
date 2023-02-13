@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import shop.mtcoding.blog.dto.ResponseDto;
 import shop.mtcoding.blog.dto.reply.ReplyReq.ReplySaveReqDto;
@@ -50,14 +51,16 @@ public class ReplyController {
         return "redirect:/board/" + replySaveReqDto.getBoardId();
     }
 
+    // @RestController, @ResponseBody, ResponseEntity 이 중 하나만 있어도 됨. 다 동일하게 데이터를
+    // 응답하는 것임.
     @DeleteMapping("/reply/{id}")
-    public @ResponseBody ResponseEntity<?> delete(@PathVariable int id) {
+    public @ResponseBody ResponseEntity<?> deleteReply(@PathVariable int id) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            throw new CustomApiException("인증되지 않았습니다", HttpStatus.UNAUTHORIZED); // 401에러
+            throw new CustomException("인증되지 않았습니다", HttpStatus.UNAUTHORIZED); // 401에러
         }
         replyService.댓글삭제(id, principal.getId());
-        return new ResponseEntity<>(new ResponseDto<>(1, "삭제성공", null), HttpStatus.OK);
-        // return "redirect:/";
+        return new ResponseEntity<>(new ResponseDto<>(1, "댓글삭제성공", null), HttpStatus.OK);
     }
 }
+// 1인증, 2댓글존재유무확인, 3권한OK - Api:어노테이션을 만들어 사용하는 기술

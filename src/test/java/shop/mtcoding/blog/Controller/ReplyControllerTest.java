@@ -1,7 +1,7 @@
 package shop.mtcoding.blog.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.Timestamp;
@@ -63,6 +63,23 @@ public class ReplyControllerTest {
     }
 
     @Test
+    public void deleteReply_test() throws Exception {
+        // given
+        int id = 1;
+
+        // when
+        // delete이기 때문에 session만 있으면 됨.
+        ResultActions resultActions = mvc.perform(
+                delete("/reply/" + id)
+                        .session(mockSession)); // session이 주입된 채로 요청
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.print("테스트: " + responseBody);
+
+        // then
+
+    }
+
+    @Test
     public void save_test() throws Exception {
         // given
         String comment = "hello";
@@ -70,6 +87,8 @@ public class ReplyControllerTest {
         String requestBody = "comment=" + comment + "&boardId=" + boardId;
 
         // when
+        // post.put이 아니면 전송할 데이터가 없기 때문에 content, contetnType를 삭제해야한다.
+        // delete를 확인하면 됨.
         ResultActions resultActions = mvc.perform(
                 post("/reply")
                         .content(requestBody)
@@ -79,19 +98,4 @@ public class ReplyControllerTest {
         resultActions.andExpect(status().is3xxRedirection());
     }
 
-    @Test
-    public void delete_test() throws Exception {
-        // given
-        int id = 0;
-
-        // when
-        ResultActions resultActions = mvc.perform(
-                delete("/reply/" + id).session(mockSession)); // session이 주입된 채로 요청
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.print("테스트: " + responseBody);
-
-        // then
-        // resultActions.andExpect(jsonPath("$.msg").value("삭제성공"));
-        // resultActions.andExpect(status().isOk());
-    }
 }

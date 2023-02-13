@@ -54,8 +54,8 @@
                 <li id="reply-${reply.id}" class="list-group-item d-flex justify-content-between">
                     <div>${reply.comment}</div>
                     <div class="d-flex">
-                        <div class="font-italic">작성자 : ${reply.username} &nbsp;</div>
-                        <c:if test="${principal.id == reply.userId}" >
+                        <div class="font-italic">작성자 : ${reply.username}</div>
+                        <c:if test="${principal.id == reply.userId}" > 
                         <button onClick="deleteByReplyId(${reply.id})" class="badge bg-secondary">삭제</button>
                         </c:if>
                     </div>
@@ -70,11 +70,12 @@
     function deleteByReplyId(id){
         $.ajax({
             type: "delete",
-            url: "/reply" + id,
+            url: "/reply/" + id,
             dataType:"json"
         }).done((res) => {
             alert(res.msg);
-            $("#reply-"+id).remove();
+            // location.reload(); //새로고침 데이터수정이나 삭제가 1건이라면 문제가 없지만
+            $("#reply-"+id).remove(); //많은경우라면 reload를 하지 않아야한다. 가령 100개라면 reload로 페이지를 전체적으로 100번 받아버리는 셈이다.
         }).fail((err) => {
             alert(err.responseJSON.msg);
         });
