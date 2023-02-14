@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -11,6 +12,7 @@ import shop.mtcoding.blog.dto.user.UserReq.JoinReqDto;
 import shop.mtcoding.blog.dto.user.UserReq.LoginReqDto;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
+import shop.mtcoding.blog.model.UserRepository;
 import shop.mtcoding.blog.service.UserService;
 
 @Controller
@@ -72,6 +74,20 @@ public class UserController {
     @GetMapping("/user/updateForm")
     public String updateForm() {
         return "user/updateForm";
+    }
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/user/profileUpdateForm")
+    public String profileUpdateForm(Model model) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return "redirect:/loginForm";
+        }
+        User userPS = userRepository.findById(principal.getId());
+        model.addAttribute("user", userPS);
+        return "user/profileUpdateForm";
     }
 
     @GetMapping("/logout")
