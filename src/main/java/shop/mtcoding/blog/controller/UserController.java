@@ -1,5 +1,9 @@
 package shop.mtcoding.blog.controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import shop.mtcoding.blog.dto.user.UserReq.JoinReqDto;
 import shop.mtcoding.blog.dto.user.UserReq.LoginReqDto;
@@ -23,6 +29,33 @@ public class UserController {
 
     @Autowired
     HttpSession session;
+
+    @PostMapping("/user/profileUpdate")
+    public @ResponseBody String profileUpdate(MultipartFile profile) throws Exception {
+        System.out.println(profile.getContentType());
+        System.out.println(profile.getSize());
+        System.out.println(profile.getOriginalFilename());
+
+        if (profile.isEmpty()) {
+            throw new CustomException("사진이 전송되지 않았습니다.");
+        }
+
+        // 1번 파일은 하드디스크에 저장
+        String savePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
+        System.out.println(savePath);
+
+        Path imageFilePath = Paths.get(savePath + "\\" + profile.getOriginalFilename());
+        System.out.println(imageFilePath);
+        try {
+            Files.write(imageFilePath, profile.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 2번 저장된 파일은 경로를 DB에 저장
+
+        return "ok";
+    }
 
     @PostMapping("/join")
     public String join(JoinReqDto joinReqDto) {
